@@ -44,7 +44,7 @@ jobs:
         run: npm install -g tree-sitter-cli
 
       - name: Generate parser
-        run: tree-sitter generate --no-bindings
+        run: tree-sitter generate
 
       - name: Build prebuilds
         run: npx prebuildify --napi --strip --arch ${{ matrix.arch }}
@@ -80,7 +80,7 @@ jobs:
         run: npm install -g tree-sitter-cli
 
       - name: Generate parser
-        run: tree-sitter generate --no-bindings
+        run: tree-sitter generate
 
       - name: Build WASM
         run: tree-sitter build --wasm

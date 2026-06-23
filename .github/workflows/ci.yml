@@ -31,7 +31,7 @@ jobs:
         run: npm install -g tree-sitter-cli
 
       - name: Generate parser
-        run: tree-sitter generate --no-bindings
+        run: tree-sitter generate
 
       - name: Run Node.js tests
         run: npm test
@@ -50,7 +50,7 @@ jobs:
         run: npm install -g tree-sitter-cli
 
       - name: Generate parser
-        run: tree-sitter generate --no-bindings
+        run: tree-sitter generate
 
       - name: Run Rust tests
         run: cargo test
