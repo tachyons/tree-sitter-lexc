@@ -1,0 +1,269 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
+  "name": "lexc",
+  "rules": {
+    "source_file": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "multichar_symbols_section"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "lexicon_section"
+          }
+        }
+      ]
+    },
+    "multichar_symbols_section": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "Multichar_Symbols"
+            },
+            {
+              "type": "STRING",
+              "value": "Alphabet"
+            }
+          ]
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "multichar_symbol"
+          }
+        }
+      ]
+    },
+    "multichar_symbol": {
+      "type": "PATTERN",
+      "value": "[^\\s;:!]+"
+    },
+    "lexicon_section": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "LEXICON"
+            },
+            {
+              "type": "STRING",
+              "value": "Lexicon"
+            }
+          ]
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "lexicon_name"
+          }
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "lexicon_entry"
+          }
+        }
+      ]
+    },
+    "lexicon_name": {
+      "type": "PATTERN",
+      "value": "[A-Za-z_][A-Za-z0-9_#-]*"
+    },
+    "lexicon_entry": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "form",
+              "content": {
+                "type": "SYMBOL",
+                "name": "entry_form"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "FIELD",
+          "name": "continuation",
+          "content": {
+            "type": "SYMBOL",
+            "name": "continuation"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": ";"
+        }
+      ]
+    },
+    "entry_form": {
+      "type": "TOKEN",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "PATTERN",
+                "value": "[^:;\\s!]*"
+              },
+              {
+                "type": "STRING",
+                "value": ":"
+              },
+              {
+                "type": "PATTERN",
+                "value": "[^:;\\s!]*"
+              }
+            ]
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SEQ",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": "%"
+                      },
+                      {
+                        "type": "PATTERN",
+                        "value": "[^\\s]"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "SEQ",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": "@"
+                      },
+                      {
+                        "type": "PATTERN",
+                        "value": "[^@\\s]+"
+                      },
+                      {
+                        "type": "STRING",
+                        "value": "@"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "REPEAT",
+                "content": {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SEQ",
+                      "members": [
+                        {
+                          "type": "STRING",
+                          "value": "%"
+                        },
+                        {
+                          "type": "PATTERN",
+                          "value": "[^\\s]"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "SEQ",
+                      "members": [
+                        {
+                          "type": "STRING",
+                          "value": "@"
+                        },
+                        {
+                          "type": "PATTERN",
+                          "value": "[^@\\s]+"
+                        },
+                        {
+                          "type": "STRING",
+                          "value": "@"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "PATTERN",
+                      "value": "[^%@:;\\s!]+"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "continuation": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "#"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "lexicon_name"
+        }
+      ]
+    },
+    "comment": {
+      "type": "PATTERN",
+      "value": "![^\\n]*"
+    }
+  },
+  "extras": [
+    {
+      "type": "PATTERN",
+      "value": "\\s"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "comment"
+    }
+  ],
+  "conflicts": [],
+  "precedences": [],
+  "externals": [],
+  "inline": [],
+  "supertypes": [],
+  "reserved": {}
+}
